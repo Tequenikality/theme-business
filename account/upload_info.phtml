@@ -14,7 +14,6 @@ $this->setLayout('account');
     <div class="alert <?=convertAlertToBootstrap($message_type)?>"><?=$message?></div>
 <?php endif; ?>
 
-
 <ul class="nav nav-tabs">
     <li class="active"><a href="#basic-information" data-toggle="tab"><?php echo Language::getText('video_basic_tab'); ?></a></li>
     <?php if ($config->allowVideoAttachments): ?>
@@ -22,8 +21,6 @@ $this->setLayout('account');
     <?php endif; ?>
     <li><a href="#advanced-settings" data-toggle="tab"><?php echo Language::getText('video_advanced_tab'); ?></a></li>
 </ul>
-
-
 
 <form action="<?=HOST?>/account/upload/info/" method="post">
 
@@ -66,7 +63,6 @@ $this->setLayout('account');
 
         </div>
         <!-- END Basic Information Tab -->
-
 
         <?php if ($config->allowVideoAttachments): ?>
 
@@ -182,7 +178,6 @@ $this->setLayout('account');
 
         <?php endif; ?>
 
-
         <!-- BEGIN Advacned Settings Tab -->
         <div id="advanced-settings" class="tab-pane">
 
@@ -235,7 +230,7 @@ $this->setLayout('account');
             </div>
 
         </div>
-        <!-- END Advacned Settings Tab -->
+        <!-- END Advanced Settings Tab -->
 
     </div>
     <!-- END Tab Panes -->
