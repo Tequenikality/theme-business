@@ -16,8 +16,6 @@ $this->setLayout('full');
 
         <div class="alert hidden"></div>
 
-
-
         <!-- BEGIN Video Player -->
         <?php if ($video->gated && !$loggedInUser): ?>
 
@@ -104,7 +102,7 @@ $this->setLayout('full');
                 </div>
 
                 <div class="col-xs-6">
-                    <p class="h4"><?=$video->views?></p>
+                    <p class="h4"><?=$video->views?> views</p>
                     <p>
                         <span class="like">
                             <span class="glyphicon glyphicon-thumbs-up"></span>
