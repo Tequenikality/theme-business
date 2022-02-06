@@ -1,0 +1,122 @@
+
+/** General Account Styles **/
+
+.account-menu {
+    margin-top: 25px;
+}
+
+.mobile-account-menu {
+    margin-top: 25px;
+}
+
+.account-menu .h4 {
+    margin-top: 20px;
+}
+
+.account-menu .h4:first-child {
+    margin-top: 0;
+}
+
+.account-menu ul {
+    list-style: none;
+    padding: 0;
+}
+
+.account-menu li {
+    margin: 5px 0;
+}
+
+.video-list > .video-large:nth-child(3n+3) {
+    margin-right: 0;
+}
+
+.video-list > .video-large:nth-child(4n+4) {
+    margin-right: 35px;
+}
+
+.member .delete {
+    z-index:99;
+    position:absolute;
+    top:10px;
+    left:10px;
+    width:16px;
+    height:16px;
+    background: url(../images/cancel.png) no-repeat;
+}
+
+.member .delete span {
+    display:none;
+}
+
+.account .form p:first-child {
+    margin-top: 0;
+}
+
+.actions {
+    border-top: 1px solid #D2D2D2;
+    overflow: hidden;
+    padding-top: 3px;
+}
+
+
+
+/** Account Index **/
+
+.account_account main .col-xs-3 p {
+    margin-top: 10px;
+}
+
+
+
+/** Playlists **/
+
+.playlist:nth-child(3n+3) {
+    margin-right: 0;
+}
+
+.playlist:nth-child(4n+4) {
+    margin-right: 35px;
+}
+
+.playlist-list + h2 {
+    margin-top: 0;
+}
+
+.account_playlists .playlist-list {
+    margin-top: 15px;
+}
+
+
+
+/** Update Profile **/
+
+#update_avatar .avatar {
+    margin:0 auto;
+    margin-bottom:5px;
+}
+
+
+
+/** Subscriptions **/
+
+.member-list > div {
+    margin-right: 25px;
+}
+
+
+
+/** Message Inbox **/
+
+#inbox .subject {
+    width: 350px;
+}
+
+#message_body {
+    background-color: #f0f0f0;
+    padding: 15px;
+    margin: 20px 0;
+}
+
+#message_display p {
+    margin: 5px 0;
+}

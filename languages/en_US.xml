@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language>
+    <information>
+        <lang_name>English</lang_name>
+        <locale>en_US</locale>
+        <author>CumulusClips</author>
+    </information>
+    <terms>
+        <confirm_button>Yes, Continue</confirm_button>
+        <confirm_header>Please Confirm</confirm_header>
+    </terms>
+</language>
