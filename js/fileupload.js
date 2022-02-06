@@ -20,14 +20,14 @@
  */
 
 // Global vars
-cumulusClips.getText('error_upload_extension');
-cumulusClips.getText('error_upload_system');
-cumulusClips.getText('error_upload_filesize');
+cumulusRedux.getText('error_upload_extension');
+cumulusRedux.getText('error_upload_system');
+cumulusRedux.getText('error_upload_filesize');
 
 $(function(){
 
     // Attach upload plugin to form field
-    $('.uploader').fileupload(cumulusClips.uploaderOptions);
+    $('.uploader').fileupload(cumulusRedux.uploaderOptions);
 
     // Attach close event to remove button
     $('body').on('click', '.upload-progress .remove', function(event){
@@ -63,7 +63,7 @@ $(function(){
 /**
  * Options to pass to uploader plugin
  */
-cumulusClips.uploaderOptions = {
+cumulusRedux.uploaderOptions = {
     dataType: 'json',
     type: 'POST',
     paramName: 'upload',
@@ -89,7 +89,7 @@ cumulusClips.uploaderOptions = {
             var allowedExtensions = $.parseJSON(decodeURIComponent($(this).data('extensions')));
             var matches = selectedFile.name.match(/\.[a-z0-9]+$/i);
             if (!matches || $.inArray(matches[0].substr(1).toLowerCase(), allowedExtensions) === -1) {
-                cumulusClips.displayMessage(false, cumulusClips.text['error_upload_extension']);
+                cumulusRedux.displayMessage(false, cumulusRedux.text['error_upload_extension']);
                 window.scrollTo(0, 0);
                 return false;
             }
@@ -97,7 +97,7 @@ cumulusClips.uploaderOptions = {
 
         // Validate filesize
         if (selectedFile.size > filesizeLimit) {
-            cumulusClips.displayMessage(false, cumulusClips.text['error_upload_filesize']);
+            cumulusRedux.displayMessage(false, cumulusRedux.text['error_upload_filesize']);
             window.scrollTo(0, 0);
             return false;
         }
@@ -110,7 +110,7 @@ cumulusClips.uploaderOptions = {
         var displayFilename = (selectedFile.name.length > 35)
             ? selectedFile.name.substring(0, 35) + '...'
             : selectedFile.name;
-        displayFilename += ' (' + cumulusClips.formatBytes(selectedFile.size, 0) + ')';
+        displayFilename += ' (' + cumulusRedux.formatBytes(selectedFile.size, 0) + ')';
         $uploadWidget.find('.title').text(displayFilename);
 
         // Store selected file data
@@ -150,7 +150,7 @@ cumulusClips.uploaderOptions = {
             // HTTP upload failed/handler rejected upload
             $(this).trigger('uploadfailed');
             resetProgress($uploadWidget);
-            cumulusClips.displayMessage(false, cumulusClips.text['error_upload_system']);
+            cumulusRedux.displayMessage(false, cumulusRedux.text['error_upload_system']);
             window.scrollTo(0, 0);
         }
     },
@@ -183,7 +183,7 @@ cumulusClips.uploaderOptions = {
 
         } else {
             resetProgress($uploadWidget);
-            cumulusClips.displayMessage(false, data.result.message);
+            cumulusRedux.displayMessage(false, data.result.message);
             window.scrollTo(0, 0);
         }
 
@@ -246,7 +246,7 @@ function initUploader(domNode)
         var displayFilename = (prePopulatedFile.name.length > 35)
             ? prePopulatedFile.name.substring(0, 35) + '...'
             : prePopulatedFile.name;
-        displayFilename += ' (' + cumulusClips.formatBytes(prePopulatedFile.size) + ')';
+        displayFilename += ' (' + cumulusRedux.formatBytes(prePopulatedFile.size) + ')';
         $uploadWidget.find('.title').text(displayFilename);
     }
 }
@@ -341,7 +341,7 @@ function getUploadWidget(domNode)
 
         // Throw error if no upload widget is assiciated with given node
         if ($container.length === 0) {
-            throw 'CumulusClips Uploader: No upload container associated with given node';
+            throw 'cumulusRedux Uploader: No upload container associated with given node';
         }
 
         return $container;

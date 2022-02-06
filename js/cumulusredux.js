@@ -1,15 +1,15 @@
 // Global vars
-var cumulusClips = window.cumulusClips || {text: {}, templates: {}};
-cumulusClips.baseUrl = $('meta[name="baseUrl"]').attr('content');
-cumulusClips.themeUrl = $('meta[name="themeUrl"]').attr('content');
-cumulusClips.loggedIn = $('meta[name="loggedIn"]').attr('content');
-cumulusClips.watchLaterPlaylistId = $('meta[name="watchLaterPlaylistId"]').attr('content');
+var cumulusRedux = window.cumulusRedux || {text: {}, templates: {}};
+cumulusRedux.baseUrl = $('meta[name="baseUrl"]').attr('content');
+cumulusRedux.themeUrl = $('meta[name="themeUrl"]').attr('content');
+cumulusRedux.loggedIn = $('meta[name="loggedIn"]').attr('content');
+cumulusRedux.watchLaterPlaylistId = $('meta[name="watchLaterPlaylistId"]').attr('content');
 
 $(function(){
 
     // Search Auto-Complete
     $('.search-input').autocomplete({
-        source: cumulusClips.baseUrl + '/search/suggest/',
+        source: cumulusRedux.baseUrl + '/search/suggest/',
         appendTo: '.search-form .autocomplete-container'
     });
 
@@ -52,10 +52,10 @@ $(function(){
 
         // Retrieve text and template
         var promises = [];
-        promises.push(cumulusClips.getTemplate('confirm-modal'));
-        promises.push(cumulusClips.getText('cancel'));
-        promises.push(cumulusClips.getText('confirm_button'));
-        promises.push(cumulusClips.getText('confirm_header'));
+        promises.push(cumulusRedux.getTemplate('confirm-modal'));
+        promises.push(cumulusRedux.getText('cancel'));
+        promises.push(cumulusRedux.getText('confirm_button'));
+        promises.push(cumulusRedux.getText('confirm_header'));
 
         // Proceed with modal once text is obtained
         $.when.apply($, promises).done(function(confirmModalTemplate) {
@@ -68,11 +68,11 @@ $(function(){
             // Inject text into modal
             $modal.find('.btn-confirm')
                 .addClass(buttonType)
-                .text(cumulusClips.text['confirm_button']);
+                .text(cumulusRedux.text['confirm_button']);
 
-            $modal.find('.modal-title').text(cumulusClips.text['confirm_header']);
+            $modal.find('.modal-title').text(cumulusRedux.text['confirm_header']);
             $modal.find('.modal-body p').text(text);
-            $modal.find('.btn-cancel').text(cumulusClips.text['cancel']);
+            $modal.find('.btn-cancel').text(cumulusRedux.text['cancel']);
 
             // Attach and display modal
             $('body').append($modal);
@@ -106,7 +106,7 @@ $(function(){
 
         var $loadMoreButton = $(this);
         var total = Number($loadMoreButton.data('total'));
-        var url = cumulusClips.baseUrl + '/members/videos/';
+        var url = cumulusRedux.baseUrl + '/members/videos/';
         var data = {
             userId: $loadMoreButton.data('user'),
             start: $('.video-list .video').length,
@@ -114,16 +114,16 @@ $(function(){
         };
 
         var promises = [];
-        promises.push(cumulusClips.apiRequest(url, data, {displayMessage: false, xhr: {type: 'get'}}));
-        promises.push(cumulusClips.getTemplate('video'));
-        promises.push(cumulusClips.getText('watch_later'));
+        promises.push(cumulusRedux.apiRequest(url, data, {displayMessage: false, xhr: {type: 'get'}}));
+        promises.push(cumulusRedux.getTemplate('video'));
+        promises.push(cumulusRedux.getText('watch_later'));
 
         // Fetch videos, template, and text
         $.when.apply($, promises).done(function(videosApiResponse, videoCardTemplate) {
 
             // Append video cards
             $.each(videosApiResponse.other.videoList, function(index, value){
-                var videoCard = cumulusClips.buildVideoCard(videoCardTemplate, value);
+                var videoCard = cumulusRedux.buildVideoCard(videoCardTemplate, value);
                 $('.video-list').append(videoCard);
             });
 
@@ -149,7 +149,7 @@ $(function(){
         var $loadMoreButton = $(this);
         var playlistList = [];
         var total = Number($loadMoreButton.data('total'));
-        var url = cumulusClips.baseUrl + '/members/playlists/';
+        var url = cumulusRedux.baseUrl + '/members/playlists/';
         var data = {
             userId: $loadMoreButton.data('user'),
             start: $('.playlist-list .playlist').length,
@@ -157,10 +157,10 @@ $(function(){
         };
 
         var promises = [];
-        promises.push(cumulusClips.apiRequest(url, data, {displayMessage: false, xhr: {type: 'get'}}));
-        promises.push(cumulusClips.getTemplate('playlist'));
-        promises.push(cumulusClips.getText('watch_all'));
-        promises.push(cumulusClips.getText('videos'));
+        promises.push(cumulusRedux.apiRequest(url, data, {displayMessage: false, xhr: {type: 'get'}}));
+        promises.push(cumulusRedux.getTemplate('playlist'));
+        promises.push(cumulusRedux.getText('watch_all'));
+        promises.push(cumulusRedux.getText('videos'));
 
         // Fetch playlists, template, and text
         $.when.apply($, promises).done(function(playlistApiResponse, playlistCardTemplate) {
@@ -180,12 +180,12 @@ $(function(){
             // Determine if thumbnails are needed
             if (thumbnailVideos.length) {
 
-                var thumbUrl = cumulusClips.baseUrl + '/api/video/list/';
+                var thumbUrl = cumulusRedux.baseUrl + '/api/video/list/';
                 var thumbData = {list: thumbnailVideos.join(',')};
                 var thumbOptions = {displayMessage: false, xhr: {type: 'get'}};
 
                 // Fetch first video in each playlist
-                cumulusClips.apiRequest(thumbUrl, thumbData, thumbOptions)
+                cumulusRedux.apiRequest(thumbUrl, thumbData, thumbOptions)
                     .done(function(videosApiResponse) {
 
                         // Cycle through each playlist to decorate it's entries
@@ -212,7 +212,7 @@ $(function(){
                 $.each(playlistList, function(index, playlist) {
 
                     // Append playlist cards to list
-                    var playlistCard = cumulusClips.buildPlaylistCard(playlistCardTemplate, playlist);
+                    var playlistCard = cumulusRedux.buildPlaylistCard(playlistCardTemplate, playlist);
                     $('.playlist-list').append(playlistCard);
 
                     // Remove load more button
@@ -255,10 +255,10 @@ $(function(){
      */
     $(document).on('click', '.flag', function(event) {
 
-        var url = cumulusClips.baseUrl + '/actions/flag/';
+        var url = cumulusRedux.baseUrl + '/actions/flag/';
         var data = {type: $(this).data('type'), id: $(this).data('id')};
 
-        cumulusClips.apiRequest(url, data);
+        cumulusRedux.apiRequest(url, data);
         window.scrollTo(0, 0);
 
         event.preventDefault();
@@ -269,7 +269,7 @@ $(function(){
     $('.video-list').on('click', '.watch-later', function(event) {
 
         var video = $(this).parents('.video');
-        var url = cumulusClips.baseUrl + '/actions/playlist/';
+        var url = cumulusRedux.baseUrl + '/actions/playlist/';
         var data = {
             action: 'add',
             shortText: true,
@@ -278,7 +278,7 @@ $(function(){
         };
 
         // Make call to API to attempt to add video to playlist
-        var apiRequestPromise = cumulusClips.apiRequest(url, data, {displayMessage: false});
+        var apiRequestPromise = cumulusRedux.apiRequest(url, data, {displayMessage: false});
 
         apiRequest.done(function(apiResponse) {
 
@@ -316,12 +316,12 @@ $(function(){
     // Attach Subscribe & Unsubscribe action to buttons
     $(document).on('click', '.subscribe', function(event) {
         var subscribeType = $(this).data('type');
-        var url = cumulusClips.baseUrl + '/actions/subscribe/';
+        var url = cumulusRedux.baseUrl + '/actions/subscribe/';
         var data = {type: subscribeType, user: $(this).data('user')};
         var subscribeButton = $(this);
 
         // Perform subscription change,
-        cumulusClips.apiRequest(url, data).done(function(apiResponse) {
+        cumulusRedux.apiRequest(url, data).done(function(apiResponse) {
 
             // Update button if the action (subscribe / unsubscribe) was successful
             if (apiResponse.result === true) {
@@ -348,7 +348,7 @@ $(function(){
 
         $.ajax({
             type    : 'get',
-            url     : cumulusClips.baseUrl + '/private/get/',
+            url     : cumulusRedux.baseUrl + '/private/get/',
             success : function(responseData, textStatus, jqXHR) {
                 $textElement.text(responseData);
                 $inputField.val(responseData);
@@ -401,7 +401,7 @@ $(function(){
         var size = $uploadWidget.find('.size').val();
         var temp = $uploadWidget.find('.temp').val();
         var index = $('#video-attachments .attachments .attachment').length;
-        var $attachment = cumulusClips.buildAttachmentCard(index, name, size, temp);
+        var $attachment = cumulusRedux.buildAttachmentCard(index, name, size, temp);
 
         // Append attachment
         $('#video-attachments .attachments').append($attachment);
@@ -438,7 +438,7 @@ $(function(){
         var name = $(this).attr('title');
         var size = $(this).data('size');
         var index = $('#video-attachments .attachments .attachment').length;
-        var $attachment = cumulusClips.buildAttachmentCard(index, name, size, fileId);
+        var $attachment = cumulusRedux.buildAttachmentCard(index, name, size, fileId);
 
         // Mark as selected
         $(this).addClass('active');
@@ -480,7 +480,7 @@ $(function(){
             var $link = $(this).find('a');
             var action = $(this).hasClass('added') ? 'remove' : 'add';
             var videoId = $link.data('video');
-            var url = cumulusClips.baseUrl + '/actions/playlist/';
+            var url = cumulusRedux.baseUrl + '/actions/playlist/';
             var data = {
                 action: action,
                 video_id: videoId,
@@ -488,7 +488,7 @@ $(function(){
             };
 
             // Make API request
-            cumulusClips.apiRequest(url, data).done(function(apiResponse) {
+            cumulusRedux.apiRequest(url, data).done(function(apiResponse) {
 
                 // Verify request was successful
                 if (apiResponse.result) {
@@ -509,9 +509,9 @@ $(function(){
 
             var createPlaylistForm = $(this);
             var data = $(this).serialize();
-            var url = cumulusClips.baseUrl + '/actions/playlist/';
+            var url = cumulusRedux.baseUrl + '/actions/playlist/';
 
-            cumulusClips.apiRequest(url, data).done(function(apiResponse) {
+            cumulusRedux.apiRequest(url, data).done(function(apiResponse) {
 
                 // Append new playlist to list of playlists
                 $('#add-to-playlist ul').append('<li><a data-playlist_id="'
@@ -538,11 +538,11 @@ $(function(){
             var rating = $(this).data('rating');
 
 
-            var url = cumulusClips.baseUrl+'/actions/rate/';
+            var url = cumulusRedux.baseUrl+'/actions/rate/';
             var data = {video_id: videoId, rating: rating};
 
             // Make API request
-            cumulusClips.apiRequest(url, data).done(function(apiResponse) {
+            cumulusRedux.apiRequest(url, data).done(function(apiResponse) {
 
                 // Verify request was successful
                 if (apiResponse.result === true) {
@@ -563,10 +563,10 @@ $(function(){
             var $commentForm = $('#comments .comment-form-main');
 
             // Verify user is logged in
-            if (cumulusClips.loggedIn === '1') {
+            if (cumulusRedux.loggedIn === '1') {
 
                 // Reset/Remove all other comment forms
-                cumulusClips.resetCommentForm($commentForm);
+                cumulusRedux.resetCommentForm($commentForm);
                 $('.comment-form-reply').remove();
 
                 // Clone main comment form
@@ -586,8 +586,8 @@ $(function(){
             } else {
 
                 // Display auth error message
-                cumulusClips.getText('error_comment_login').done(function(text) {
-                    cumulusClips.displayMessage(false, text);
+                cumulusRedux.getText('error_comment_login').done(function(text) {
+                    cumulusRedux.displayMessage(false, text);
                     window.scrollTo(0, 0);
                 });
             }
@@ -634,19 +634,19 @@ $(function(){
         $('#comments').on('submit', 'form', function() {
 
             var promises = [];
-            var url = cumulusClips.baseUrl + '/actions/comment/add/';
+            var url = cumulusRedux.baseUrl + '/actions/comment/add/';
             var commentFormContainer = $(this).parent();
 
             // Submit new comment
-            promises.push(cumulusClips.apiRequest(url, $(this).serialize()));
+            promises.push(cumulusRedux.apiRequest(url, $(this).serialize()));
 
             // Retrieve comment card template
-            promises.push(cumulusClips.getTemplate('comment'));
+            promises.push(cumulusRedux.getTemplate('comment'));
 
             // Retrieve text for comment card
-            promises.push(cumulusClips.getText('reply_to'));
-            promises.push(cumulusClips.getText('reply'));
-            promises.push(cumulusClips.getText('report_abuse'));
+            promises.push(cumulusRedux.getText('reply_to'));
+            promises.push(cumulusRedux.getText('reply'));
+            promises.push(cumulusRedux.getText('report_abuse'));
 
             // Wait for text entries and comment post to be resolved
             $.when.apply($, promises)
@@ -659,13 +659,13 @@ $(function(){
                         if (commentFormContainer.hasClass('comment-form-reply')) {
                             commentFormContainer.remove();
                         } else {
-                            cumulusClips.resetCommentForm(commentFormContainer);
+                            cumulusRedux.resetCommentForm(commentFormContainer);
                         }
 
                         // Append new comment if auto-approve comments is on
                         if (commentApiResponse.other.autoApprove === true) {
 
-                            var commentCardElement = cumulusClips.buildCommentCard(
+                            var commentCardElement = cumulusRedux.buildCommentCard(
                                 commentCardTemplate,
                                 commentApiResponse.other.commentCard
                             );
@@ -728,7 +728,7 @@ $(function(){
             if (loadMoreComments) {
 
                 var promises = [];
-                var url = cumulusClips.baseUrl + '/actions/comments/get/';
+                var url = cumulusRedux.baseUrl + '/actions/comments/get/';
                 var data = {
                     videoId         : $loadMoreButton.data('video'),
                     lastCommentId   : lastCommentId,
@@ -739,15 +739,15 @@ $(function(){
                 $loadMoreButton.text(loadingText);
 
                 // Retrieve comment card template
-                promises.push(cumulusClips.getTemplate('comment'));
+                promises.push(cumulusRedux.getTemplate('comment'));
 
                 // Retrieve subsequent comments
-                promises.push(cumulusClips.apiRequest(url, data, {displayMessage: false, xhr: {type: 'get'}}));
+                promises.push(cumulusRedux.apiRequest(url, data, {displayMessage: false, xhr: {type: 'get'}}));
 
                 // Retrieve text for comment card
-                promises.push(cumulusClips.getText('reply_to'));
-                promises.push(cumulusClips.getText('reply'));
-                promises.push(cumulusClips.getText('report_abuse'));
+                promises.push(cumulusRedux.getText('reply_to'));
+                promises.push(cumulusRedux.getText('reply'));
+                promises.push(cumulusRedux.getText('report_abuse'));
 
                 // Resolve promises together
                 $.when.apply($, promises)
@@ -760,7 +760,7 @@ $(function(){
                         $.each(commentsApiResponse.other.commentCardList, function(key, commentCard){
 
                             $('.comment-list').find('div[data-comment="' + commentCard.comment.commentId + '"]').remove();
-                            var commentCardElement = cumulusClips.buildCommentCard(
+                            var commentCardElement = cumulusRedux.buildCommentCard(
                                 commentCardTemplate,
                                 commentCard
                             );
@@ -805,8 +805,8 @@ $(function(){
     // Registration page actions
     if ($('.register').length > 0) {
 
-        cumulusClips.getText('username_minimum');
-        cumulusClips.getText('checking_availability');
+        cumulusRedux.getText('username_minimum');
+        cumulusRedux.getText('checking_availability');
 
         var delay;
         var validLengthReachedOnce = false;
@@ -819,15 +819,15 @@ $(function(){
             if (username.length >= 4) {
 
                 validLengthReachedOnce = true;
-                $('.register .help-block').html(cumulusClips.text['checking_availability'] + '&hellip;');
+                $('.register .help-block').html(cumulusRedux.text['checking_availability'] + '&hellip;');
 
                 delay = setTimeout(function(){
 
-                    var url = cumulusClips.baseUrl + '/actions/username/';
+                    var url = cumulusRedux.baseUrl + '/actions/username/';
                     var data = {username:username};
 
                     // Make API request to search for username
-                    cumulusClips.apiRequest(url, data).done(function(apiResponse) {
+                    cumulusRedux.apiRequest(url, data).done(function(apiResponse) {
 
                         $('.register .help-block').text(apiResponse.message);
                         if (apiResponse.result === true) {
@@ -845,7 +845,7 @@ $(function(){
             } else if (validLengthReachedOnce) {
                 $('.register .has-feedback').addClass('has-error').removeClass('has-success');
                 $('.register .form-control-feedback').addClass('glyphicon-remove').removeClass('glyphicon-ok');
-                $('.register .help-block').text(cumulusClips.text['username_minimum']);
+                $('.register .help-block').text(cumulusRedux.text['username_minimum']);
             }
         });
     }
@@ -865,11 +865,11 @@ GENERAL FUNCTIONS
  * @param {Object} video The video whose URL is being retrieved
  * @return {String} Returns the absolute URL to given video
  */
-cumulusClips.getVideoUrl = function(video)
+cumulusRedux.getVideoUrl = function(video)
 {
-    var url = cumulusClips.baseUrl;
+    var url = cumulusRedux.baseUrl;
     url += '/watch/' + video.videoId + '/';
-    url += cumulusClips.generateSlug(video.title) + '/';
+    url += cumulusRedux.generateSlug(video.title) + '/';
     return url;
 };
 
@@ -879,7 +879,7 @@ cumulusClips.getVideoUrl = function(video)
  * @param {String} stringToConvert The string to convert into a URL slug
  * @return {String} Returns a string with non alphanum characters converted to hyphens
  */
-cumulusClips.generateSlug = function(stringToConvert)
+cumulusRedux.generateSlug = function(stringToConvert)
 {
     var slug = stringToConvert.replace(/[^a-z0-9]+/ig, '-');
     slug = slug.replace(/^-|-$/g, '').toLowerCase();
@@ -892,7 +892,7 @@ cumulusClips.generateSlug = function(stringToConvert)
  * @param {Boolean} result The type of alert to display (true = Success, false = Error)
  * @param {String} message The textual message for the alert
  */
-cumulusClips.displayMessage = function(result, message)
+cumulusRedux.displayMessage = function(result, message)
 {
     var cssClass = (result === true) ? 'alert-success' : 'alert-danger';
     var existingClass = ($('.alert').hasClass('alert-success')) ? 'alert-success' : 'alert-danger';
@@ -909,7 +909,7 @@ cumulusClips.displayMessage = function(result, message)
  * @param {Number} precision Decimal places to use in final value
  * @return {String} Returns human readable formatted bytes
  */
-cumulusClips.formatBytes = function(bytes, precision)
+cumulusRedux.formatBytes = function(bytes, precision)
 {
     var units = ['b', 'KB', 'MB', 'GB', 'TB'];
     bytes = Math.max(bytes, 0);
@@ -926,20 +926,20 @@ cumulusClips.formatBytes = function(bytes, precision)
  * @param {Object} replacements (Optional) List of key/value replacements in JSON format
  * @return {Promise} Returns promise that is resolved with request language text
  */
-cumulusClips.getText = function(node, replacements)
+cumulusRedux.getText = function(node, replacements)
 {
     var textDeferred = $.Deferred();
 
-    if (cumulusClips.text[node]) {
-        textDeferred.resolve(cumulusClips.text[node]);
+    if (cumulusRedux.text[node]) {
+        textDeferred.resolve(cumulusRedux.text[node]);
     } else {
 
         $.ajax({
             type    : 'POST',
-            url     : cumulusClips.baseUrl+'/language/get/',
+            url     : cumulusRedux.baseUrl+'/language/get/',
             data    : {node:node, replacements:replacements},
         }).done(function(data){
-            cumulusClips.text[node] = data;
+            cumulusRedux.text[node] = data;
             textDeferred.resolve(data);
         });
 
@@ -954,23 +954,23 @@ cumulusClips.getText = function(node, replacements)
  * @param {String} templateName Name template to load
  * @return {Promise} Returns promise that is resolved with template file contents
  */
-cumulusClips.getTemplate = function(templateName)
+cumulusRedux.getTemplate = function(templateName)
 {
     var templateDeferred = $.Deferred();
 
     // Verify if template has already been loaded
-    if (!cumulusClips.templates[templateName]) {
+    if (!cumulusRedux.templates[templateName]) {
 
         // Retrieve template
-        var xhrPromise = $.get(cumulusClips.themeUrl + '/blocks/' + templateName + '.html');
+        var xhrPromise = $.get(cumulusRedux.themeUrl + '/blocks/' + templateName + '.html');
 
         xhrPromise.done(function(data) {
-            cumulusClips.templates[templateName] = data;
+            cumulusRedux.templates[templateName] = data;
             templateDeferred.resolve(data);
         });
 
     } else {
-        templateDeferred.resolve(cumulusClips.templates[templateName]);
+        templateDeferred.resolve(cumulusRedux.templates[templateName]);
     }
 
     return templateDeferred.promise();
@@ -986,7 +986,7 @@ cumulusClips.getTemplate = function(templateName)
  *  - xhr {Object} Custom XHR options to be provided to jQuery.ajax()
  * @return {Promise} Returns promise that is resolved with a uniform API response
  */
-cumulusClips.apiRequest = function(url, data, options)
+cumulusRedux.apiRequest = function(url, data, options)
 {
     var requestOptions = $.extend(true, {
         displayMessage : true,
@@ -1031,7 +1031,7 @@ cumulusClips.apiRequest = function(url, data, options)
                 headers[headerName] = parts.join(':').trim();
             });
 
-            // CumulusClips generated error
+            // cumulusRedux generated error
             if (jqXHR.responseJSON) {
 
                 $.extend(
@@ -1065,7 +1065,7 @@ cumulusClips.apiRequest = function(url, data, options)
 
         // Display message to user
         if (requestOptions.displayMessage) {
-            cumulusClips.displayMessage(apiResponse.result, apiResponse.message);
+            cumulusRedux.displayMessage(apiResponse.result, apiResponse.message);
         }
 
     });
@@ -1080,11 +1080,11 @@ cumulusClips.apiRequest = function(url, data, options)
  * @param {Number|String} file If file is an existing attachment then file ID is expected, otherwise absolute path to upload temp file
  * @return {jQuery} Returns jQuery object reprensenting attachment card
  */
-cumulusClips.buildAttachmentCard = function(index, name, size, file)
+cumulusRedux.buildAttachmentCard = function(index, name, size, file)
 {
     var fieldName = (typeof file === 'number') ? 'file' : 'temp';
     var displayFilename = (name.length > 35) ? name.substring(0, 35) + '...' : name;
-    displayFilename += ' (' + cumulusClips.formatBytes(size, 0) + ')';
+    displayFilename += ' (' + cumulusRedux.formatBytes(size, 0) + ')';
 
     // Build card
     var $attachment = $('<div class="attachment">'
@@ -1120,7 +1120,7 @@ cumulusClips.buildAttachmentCard = function(index, name, size, file)
  * @param {Object} commentCardData The CommentCard object for the comment being appended
  * @return {jQuery} The jQuery object for the newly filled comment card element
  */
-cumulusClips.buildCommentCard = function(commentCardTemplate, commentCardData)
+cumulusRedux.buildCommentCard = function(commentCardTemplate, commentCardData)
 {
     var commentCard = $(commentCardTemplate);
     commentCard.attr('data-comment', commentCardData.comment.commentId);
@@ -1129,14 +1129,14 @@ cumulusClips.buildCommentCard = function(commentCardTemplate, commentCardData)
     if (commentCardData.avatar !== null) {
         commentCard.find('img').attr('src', commentCardData.avatar);
     } else {
-        commentCard.find('img').attr('src', cumulusClips.themeUrl + '/images/avatar.png');
+        commentCard.find('img').attr('src', cumulusRedux.themeUrl + '/images/avatar.png');
     }
 
     // Set comment author
     var $commentAuthor = commentCard.find('.comment-author');
     $commentAuthor.text(commentCardData.author.username);
     if ($commentAuthor.is('a')) {
-        $commentAuthor.attr('href', cumulusClips.baseUrl + '/members/' + commentCardData.author.username)
+        $commentAuthor.attr('href', cumulusRedux.baseUrl + '/members/' + commentCardData.author.username)
     }
 
     // Set comment date
@@ -1146,20 +1146,20 @@ cumulusClips.buildCommentCard = function(commentCardTemplate, commentCardData)
     commentCard.find('.comment-date').text(monthPadding + (commentDate.getMonth()+1) + '/' + datePadding + commentDate.getDate() + '/' + commentDate.getFullYear());
 
     // Set comment action links
-    commentCard.find('.comment-action .reply').text(cumulusClips.text['reply']);
+    commentCard.find('.comment-action .reply').text(cumulusRedux.text['reply']);
     commentCard.find('.flag')
-        .text(cumulusClips.text['report_abuse'])
+        .text(cumulusRedux.text['report_abuse'])
         .attr('data-id', commentCardData.comment.commentId);
 
     // Set reply to text if app.
     if (commentCardData.comment.parentId !== 0) {
 
         $commentReplyLabel = commentCard.find('.comment-reply');
-        $commentReplyLabel.prepend(cumulusClips.text['reply_to'] + ' ');
+        $commentReplyLabel.prepend(cumulusRedux.text['reply_to'] + ' ');
 
         // Set link to parent comment author's profile
         $commentReplyLabel.find('.comment-parent-author')
-            .attr('href', cumulusClips.baseUrl + '/members/' + commentCardData.parentAuthor.username)
+            .attr('href', cumulusRedux.baseUrl + '/members/' + commentCardData.parentAuthor.username)
             .text(commentCardData.parentAuthor.username);
 
     } else {
@@ -1179,7 +1179,7 @@ cumulusClips.buildCommentCard = function(commentCardTemplate, commentCardData)
  *
  * @param {jQuery} commentForm jQuery object for the comment form's immediate container
  */
-cumulusClips.resetCommentForm = function (commentForm)
+cumulusRedux.resetCommentForm = function (commentForm)
 {
     commentForm.addClass('collapsed');
     var commentField = commentForm.find('textarea');
@@ -1193,19 +1193,19 @@ cumulusClips.resetCommentForm = function (commentForm)
  * @param {Object} video The video which will be represented by the card
  * @return {jQuery} Returns jQuery object Representing the new video card
  */
-cumulusClips.buildVideoCard = function (videoCardTemplate, video)
+cumulusRedux.buildVideoCard = function (videoCardTemplate, video)
 {
     var $videoCard = $(videoCardTemplate);
-    var url = cumulusClips.getVideoUrl(video);
+    var url = cumulusRedux.getVideoUrl(video);
 
-    $videoCard.find('img').attr('src', cumulusClips.baseUrl + '/cc-content/uploads/thumbs/' + video.filename + '.jpg');
+    $videoCard.find('img').attr('src', cumulusRedux.baseUrl + '/cc-content/uploads/thumbs/' + video.filename + '.jpg');
     $videoCard.find('.duration').text(video.duration);
     $videoCard.find('.video-title, .thumbnail a').attr('title', video.title).attr('href', url);
     $videoCard.find('.video-title').text(video.title);
     $videoCard.find('.watch-later')
-        .attr('data-playlist', cumulusClips.watchLaterPlaylistId)
+        .attr('data-playlist', cumulusRedux.watchLaterPlaylistId)
         .attr('data-video', video.videoId)
-        .attr('title', cumulusClips.text['watch_later']);
+        .attr('title', cumulusRedux.text['watch_later']);
 
     return $videoCard;
 };
@@ -1217,23 +1217,23 @@ cumulusClips.buildVideoCard = function (videoCardTemplate, video)
  * @param object playlist The playlist which will be represented by the card
  * @return object Returns jQuery object Representing the new playlist card
  */
-cumulusClips.buildPlaylistCard = function(playlistCardTemplate, playlist)
+cumulusRedux.buildPlaylistCard = function(playlistCardTemplate, playlist)
 {
     var playlistCard = $(playlistCardTemplate);
     if (playlist.entries.length === 0) {
         playlistCard.addClass('playlist-empty');
         playlistCard.find('a').remove();
-        playlistCard.find('img').attr('src', cumulusClips.themeUrl + '/images/playlist_placeholder.png');
+        playlistCard.find('img').attr('src', cumulusRedux.themeUrl + '/images/playlist_placeholder.png');
         playlistCard.find('.title').text(playlist.name);
     } else {
-        playlistCard.find('.watch-all').append(cumulusClips.text['watch_all']);
+        playlistCard.find('.watch-all').append(cumulusRedux.text['watch_all']);
         playlistCard.find('.thumb').remove();
-        playlistCard.find('img').attr('src', cumulusClips.baseUrl + '/cc-content/uploads/thumbs/' + playlist.entries[0].video.filename + '.jpg');
+        playlistCard.find('img').attr('src', cumulusRedux.baseUrl + '/cc-content/uploads/thumbs/' + playlist.entries[0].video.filename + '.jpg');
         playlistCard.find('.title a').text(playlist.name);
         playlistCard.find('a')
-            .attr('href', cumulusClips.getVideoUrl(playlist.entries[0].video) + '?playlist=' + playlist.playlistId)
+            .attr('href', cumulusRedux.getVideoUrl(playlist.entries[0].video) + '?playlist=' + playlist.playlistId)
             .attr('title', playlist.name);
     }
-    playlistCard.find('.video-count').html(playlist.entries.length + '<br>' + cumulusClips.text['videos']);
+    playlistCard.find('.video-count').html(playlist.entries.length + '<br>' + cumulusRedux.text['videos']);
     return playlistCard;
 };

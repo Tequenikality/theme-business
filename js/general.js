@@ -7,11 +7,11 @@
  * @param {Object} video The video which will be represented by the card
  * @return {jQuery} Returns jQuery object Representing the new video card
  */
-cumulusClips.buildVideoCard = function(videoCardTemplate, video)
+cumulusRedux.buildVideoCard = function(videoCardTemplate, video)
 {
     var videoCard = $(videoCardTemplate);
-    var url = cumulusClips.getVideoUrl(video);
-    videoCard.find('img').attr('src', cumulusClips.baseUrl + '/cc-content/uploads/thumbs/' + video.filename + '.jpg');
+    var url = cumulusRedux.getVideoUrl(video);
+    videoCard.find('img').attr('src', cumulusRedux.baseUrl + '/cc-content/uploads/thumbs/' + video.filename + '.jpg');
     videoCard.find('.glyphicon-time').after(video.duration);
     videoCard.find('.glyphicon-user').after(video.username);
     videoCard.find('a').attr('title', video.title).attr('href', url);
